@@ -1,6 +1,6 @@
 # Mini 样例卷 · 《镜中之约》
 
-> 本目录是「天命 Skill」的**最小可运行示例**。
+> 本目录是「天命」内置规则系统的**最小可运行示例**。
 > 故事极简（5 章），但完整覆盖了核心协议的关键场景：
 > 角色烙印、Tier-1 伏笔、缓冲-代价、关系向量、文风溯源。
 
@@ -44,18 +44,19 @@ examples/mini-volume/
 
 ## 四、 重现工作流
 
-如果你想用这个样例对照学习「天命」的工作流，可按下列顺序在 Claude 中执行：
+如果你想用这个样例对照学习「天命」的工作流，可按下列顺序执行：
 
 ```
-1. 把整个 tianming-skill/ 目录共享给 Claude
-2. 把 examples/mini-volume/ 下的 5 个文件作为知识库共享给 Claude
-3. 输入：初始化
-4. 观察 Claude 是否能按 core/boot-sequence.md 的标准格式返回报告
-5. 输入：「天命：草案 | 卷[一] 第[1]章」
-6. 观察输出是否符合 protocols/draft.md 中【显化蓝图草案】的硬性约束
+1. 从项目根目录开启 AI 会话，让 AI 先读取 AGENTS.md
+2. AI 必须继续读取 .tianming/SKILL.md，并按其中路由加载协议
+3. 把 examples/mini-volume/ 下的 5 个文件作为知识库上下文，或复制到项目根目录
+4. 输入：初始化
+5. 观察 AI 是否能按 .tianming/core/boot-sequence.md 的标准格式返回报告
+6. 输入：「天命：草案 | 卷[一] 第[1]章」
+7. 观察输出是否符合 .tianming/protocols/draft.md 中【显化蓝图草案】的硬性约束
    （如：净字 ≤ 300、悬念钩子一字不差复现）
-7. 输入：「天命：正文 | 卷[一]，第[1]章 ...」
-8. 观察生成的正文是否：
+8. 输入：「天命：正文 | 卷[一]，第[1]章 ...」
+9. 观察生成的正文是否：
    - 包裹在 ```markdown ... ```
    - 净字落入 3500-4000 区间
    - 文气符合《文风样本.md》
@@ -69,7 +70,7 @@ examples/mini-volume/
 本样例的所有 `[REF:xxx]` 引用，都已通过：
 
 ```powershell
-.\scripts\reference-linter.ps1 -SkillPath . -OriginalPrompt ..\..\..\提示词.md
+pwsh .tianming/scripts/reference-linter.ps1 -SkillPath .tianming -OriginalPrompt ..\提示词.md
 ```
 
 校验。任何对样例的修改建议都应保持引用完整性。

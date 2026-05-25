@@ -3,7 +3,7 @@
     天命 Skill 引用完整性 Lint 工具
 
 .DESCRIPTION
-    扫描 tianming-skill 目录下所有 .md 文件，检查：
+    扫描 .tianming 规则目录下所有 .md 文件，检查：
     - 所有 [REF:xxx] 是否能在 [ID:xxx] 中找到
     - 所有 [KERNEL_REF:xxx] 是否能在 [ID:xxx] 中找到
     - 所有 [VAR:xxx] 是否能在 constants/global-constants.md 中找到
@@ -21,7 +21,7 @@
 
 .EXAMPLE
     .\reference-linter.ps1
-    .\reference-linter.ps1 -SkillPath E:\AI\tianming-skill
+    .\reference-linter.ps1 -SkillPath E:\AI\my-novel\.tianming
     .\reference-linter.ps1 -OriginalPrompt E:\AI\提示词.md
     .\reference-linter.ps1 -Json | Out-File lint-report.json
 

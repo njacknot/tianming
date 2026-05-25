@@ -1,78 +1,98 @@
-## 💬 交流群
+## 交流群
 
 - [点击链接加入群聊【天命-智能创作（BUG收集）】](https://qm.qq.com/q/YWivpFjKou)
 
 群号：414086347
 
-> ## 🖥️ 寻找软件版？
+> ## 寻找软件版？
 >
-> 如果你更喜欢**开箱即用的桌面应用**体验，请移步 👉 **[天命-智能小说创作软件](https://github.com/zy-zmc/tianming-novel-ai-writer)**
+> 如果你更喜欢开箱即用的桌面应用体验，请移步：[天命-智能小说创作软件](https://github.com/zy-zmc/tianming-novel-ai-writer)
 >
 > 无需任何提示词知识，下载即用，内置完整天命系统。
 
 ---
 
-# 天命 · 长篇小说协同创作 Skill
+# 天命 · 新书项目模板
 
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
-> **TianMing** — A modular AI Skill for co-writing long-form novels with Claude.
-> Restructured from a 995-line monolithic prompt into 30+ protocol files with
-> progressive disclosure, intent-based command routing, and built-in consistency enforcement.
+> **TianMing** 是一个可直接复制为新书项目的长篇小说协同创作模板。
+> 项目根目录是新书工作区，`.tianming/` 是内置天命规则系统。
 
 ---
 
-> 由 2025 年「天命」长 Prompt 系统（995 行）拆分重构而成的 Claude Skill。
-> 通过渐进式披露（Progressive Disclosure）机制，按指令路由按需加载相关协议，
-> 实现 token 消耗下降 50-70% 与跨平台复用。
+## 一、这个项目是什么
 
----
-
-## 一、 这个 Skill 是什么
-
-「天命」是一个为长篇小说创作而设计的、高度结构化的 AI 协同写作系统。
-它的核心思想是：
+「天命」是一个为长篇小说创作而设计的结构化 AI 协同写作系统。
 
 - **执笔者（用户）** 负责创意、世界观、人物烙印、文风样本
 - **天命（系统）** 负责保证跨章节的世界观一致性、伏笔回收、节奏控制、文风稳定
 
-整个系统通过一套**指令式 API**（如 `「天命：大纲」`、`「天命：正文」`）
-进行交互，让长篇小说创作具备工程化的可控性。
+本仓库已经从单独的 Skill 包重构为“新书项目模板 + 内置规则包”：
+
+- 根目录用于存放新书知识库、`AGENTS.md` 和项目说明
+- `.tianming/` 存放完整天命规则、协议、模板和维护脚本
+- AI AGENTS 进入项目后必须先读 `AGENTS.md`，再按 `.tianming/SKILL.md` 的规则执行
 
 ---
 
-## 二、 快速开始
+## 二、快速开始
 
-### 1. 准备知识库
+### 1. 复制为新书项目
 
-把 `kb-templates/` 下的 5 个模板复制到你的小说项目目录，并按模板说明填充：
+把本仓库复制成你的新书目录，例如：
 
+```text
+我的新书/
+├── AGENTS.md
+├── README.md
+├── .tianming/
+└── examples/
 ```
-你的小说项目/
-├── 世界基石.md           ← 由系统自动维护（初始可为空模板）
-├── 世界观规则.md         ← 你必须填写
-├── 角色档案.md           ← 你必须填写
+
+### 2. 填写根目录知识库
+
+根目录已经放置 5 个可直接填写的知识库文件。新开书时先填写它们；如需重置，可从 `.tianming/kb-templates/` 重新复制模板。
+
+```text
+我的新书/
+├── 世界基石.md           ← 由系统自动维护，初始可为空模板
+├── 世界观规则.md         ← 必填
+├── 角色档案.md           ← 必填
 ├── 档案事件.md           ← 同人/前传必填，原创可选填
 └── 文风样本.md           ← 必填，越完整越好
 ```
 
-### 2. 加载 Skill
+根目录文件与模板来源：
 
-将整个 `tianming-skill/` 目录放到 Claude 可访问的位置（Skill 注册方式
-依赖你使用的 Claude 平台，详见 Anthropic 官方文档）。
+| 目标文件 | 模板来源 |
+|---|---|
+| `世界基石.md` | `.tianming/kb-templates/world-stone.template.md` |
+| `世界观规则.md` | `.tianming/kb-templates/world-rules.template.md` |
+| `角色档案.md` | `.tianming/kb-templates/character-archive.template.md` |
+| `档案事件.md` | `.tianming/kb-templates/archive-events.template.md` |
+| `文风样本.md` | `.tianming/kb-templates/style-sample.template.md` |
 
-### 3. 初始化
+### 3. 启动 AI 会话
 
-在与 Claude 的对话中输入：
+在新书项目根目录开启 AI 会话。AI AGENTS 必须：
 
-```
+1. 读取 `AGENTS.md`
+2. 读取 `.tianming/SKILL.md`
+3. 按 `.tianming/SKILL.md` 的指令路由加载协议
+4. 从项目根目录读取真实知识库
+
+### 4. 初始化
+
+输入：
+
+```text
 初始化
 ```
 
-系统会执行 [REF:core.boot.arbitration] 的【第一阶段：内殿铸魂】，
-检查所有协议绑定状态与知识库连接状态，并返回标准化报告。
+系统会执行 `.tianming/core/boot-sequence.md` 的启动规则，检查协议绑定状态与知识库连接状态，并返回标准化报告。
 
-### 4. 开始创作
+### 5. 开始创作
 
 按以下指令顺序推进：
 
@@ -80,75 +100,47 @@
 |---|---|---|
 | 1 | `「天命：大纲」` | 【战略宏图】 + 【宏观节奏宪章】 |
 | 2 | `「天命：规划」` | 【全书战役总蓝图】 + 【指令序列】 |
-| 3 | `「天命：目录 卷1 第1-30章」` | 详细章节目录（30 章 / 批） |
-| 4 | `「天命：草案 卷1 第1章」` | （可选）章节骨架蓝图，供审查 |
-| 5 | `「天命：正文 卷1 第1章」` | 完整章节正文（3500-4000 净字） |
-| 6 | 重复 4-5 直到本卷完成 | — |
+| 3 | `「天命：目录 | 卷1 第1-30章」` | 详细章节目录 |
+| 4 | `「天命：草案 | 卷1 第1章」` | 可选章节骨架蓝图 |
+| 5 | `「天命：正文 | 卷1，第1章」` | 完整章节正文 |
+| 6 | 重复 4-5 直到本卷完成 | 持续创作 |
 | 7 | `「天命：体检」` | 《世界基石.md》健康报告 |
 | 8 | `「天命：存档」` | 结构化更新补丁 |
 
 ---
 
-## 三、 目录结构
+## 三、目录结构
 
-```
-tianming-skill/
-├── SKILL.md                          ← 主入口（路由表 + 启动清单）
+```text
+新书项目/
+├── AGENTS.md                         ← AI AGENTS 入口规则
 ├── README.md                         ← 本文件
+├── LICENSE
+├── 世界基石.md                       ← 新书动态核心，根目录初始模板
+├── 世界观规则.md                     ← 新书静态基石，根目录初始模板
+├── 角色档案.md                       ← 新书静态基石，根目录初始模板
+├── 档案事件.md                       ← 新书静态基石，根目录初始模板
+├── 文风样本.md                       ← 新书静态基石，根目录初始模板
 │
-├── core/                             ← 系统内核（冷启动必加载）
-│   ├── boot-sequence.md              ← 启动序列
-│   ├── arbitration.md                ← 双层真理仲裁协议
-│   └── session-state.md              ← 会话状态维持（避免重复加载）
+├── .tianming/                        ← 内置天命规则系统
+│   ├── SKILL.md                      ← 主入口（路由表 + 启动清单）
+│   ├── core/                         ← 系统内核
+│   ├── codex/                        ← 绝对法典
+│   ├── protocols/                    ← 运行协议
+│   ├── aesthetic/                    ← 天书铁律
+│   ├── constants/                    ← 全局常数
+│   ├── kb-templates/                 ← 知识库模板
+│   └── scripts/                      ← 维护工具脚本
 │
-├── codex/                            ← 绝对法典（按指令路由加载）
-│   ├── consistency.md                ← 世界观一致性（因果律/代价守恒/角色烙印/实体时序）
-│   ├── narrative-structure.md        ← 宏观叙事（哲学母题/主题回响/熵增/呼吸法）
-│   ├── output-discipline.md          ← 输出纪律（圣堂法令/文脉丰盈/封装/仪表盘）
-│   ├── security.md                   ← 系统安全（仲裁/熔断/驳回/奇点豁免）
-│   └── system-protocols.md           ← 全局唯一系统协议（冲突值/时空/载体DNA/类型穿透）
-│
-├── protocols/                        ← 运行协议（响应具体指令）
-│   ├── outline.md                    ← 「天命：大纲」
-│   ├── toc.md                        ← 「天命：规划」/「天命：目录」
-│   ├── draft.md                      ← 「天命：草案」
-│   ├── main-body.md                  ← 「天命：正文」
-│   ├── health-check.md               ← 「天命：体检」
-│   └── archive.md                    ← 「天命：存档」
-│
-├── aesthetic/                        ← 天书铁律（草案/正文加载）
-│   ├── style-genesis.md              ← 文气溯源 + 口语化
-│   ├── writing-edicts.md             ← 创作戒律（打破常规/凝练语言）
-│   ├── rendering-tools.md            ← 渲染工具（人物/对话/打斗）
-│   └── ai-signature-blacklist.md     ← AI 指纹黑名单
-│
-├── constants/
-│   └── global-constants.md           ← 所有 [VAR:xxx] 全局常数
-│
-├── kb-templates/                     ← 用户知识库模板（用户应替换）
-│   ├── world-stone.template.md       ← 《世界基石.md》模板
-│   ├── world-rules.template.md       ← 《世界观规则.md》模板
-│   ├── character-archive.template.md ← 《角色档案.md》模板
-│   ├── archive-events.template.md    ← 《档案事件.md》模板
-│   └── style-sample.template.md      ← 《文风样本.md》模板
-│
-├── scripts/                          ← 维护工具脚本
-│   ├── reference-linter.ps1          ← 引用完整性 lint（PowerShell 5+）
-│   └── conflict-score.py             ← 冲突值量化算法（Python 3.7+）
-│
-└── examples/                         ← 实战样例
-    └── mini-volume/                  ← 5 章极简样例卷《镜中之约》
-        ├── README.md
-        ├── 世界基石.md
-        ├── 世界观规则.md
-        ├── 角色档案.md
-        ├── 档案事件.md
-        └── 文风样本.md
+├── examples/
+│   └── mini-volume/                  ← 5 章极简样例卷《镜中之约》
+└── tests/
+    └── validate-embedded-layout.sh   ← 内置结构校验
 ```
 
 ---
 
-## 四、 术语速查表
+## 四、术语速查表
 
 ### 系统术语
 
@@ -171,7 +163,7 @@ tianming-skill/
 | `[ID:xxx]` | 当前协议的唯一标识符 |
 | `[REF:xxx]` | 引用其他协议（普通调用） |
 | `[KERNEL_REF:xxx]` | 强制注入其他协议（内核级、不可协商） |
-| `[VAR:xxx]` | 引用 `constants/global-constants.md` 的常数 |
+| `[VAR:xxx]` | 引用 `.tianming/constants/global-constants.md` 的常数 |
 | `[元标签:...]` | 协议的功能分类标签 |
 
 ### 叙事术语
@@ -181,7 +173,7 @@ tianming-skill/
 | **Tier-1 战略级** | 影响主角命运/世界结局的伏笔 |
 | **Tier-2 战役级** | 影响当前卷/派系的伏笔 |
 | **Tier-3 战术级** | 影响局部冲突的伏笔 |
-| **峰值章节** | 冲突值 ≥ ★★★★☆ 的章节 |
+| **峰值章节** | 冲突值不低于四星的章节 |
 | **奇点事件** | 临时挂起力量上限的破格章节 |
 | **载体 DNA** | 悬念钩子的语义指纹 |
 | **缓冲-代价** | 用于代价清算的缓冲章 |
@@ -190,50 +182,27 @@ tianming-skill/
 
 ---
 
-## 五、 与原始 Prompt 的差异
+## 五、维护工具
 
-### 1. 已完成的改进
+### 内置结构校验
 
-- ✅ **拆分**：995 行单文件 → 24 个核心模块文件
-- ✅ **路由化**：按指令路由按需加载（`SKILL.md` 包含完整路由表）
-- ✅ **引用规范化**：`[REF: xxx]` → `[REF:xxx]`（冒号后无空格）
-- ✅ **元数据补全**：每个文件顶部添加 frontmatter，标注加载条件、依赖
-- ✅ **常数集中**：所有数值常数集中到 `constants/global-constants.md`
-- ✅ **模板分离**：知识库与协议解耦，模板放在 `kb-templates/` 供用户填充
-- ✅ **指令格式统一**：所有含参数指令统一为 `「天命：xxx | 卷[X] 第[Y]章」` 标准格式 + 简写兼容
-- ✅ **引用 Lint**：`scripts/reference-linter.ps1` 自动校验 `[ID]/[REF]/[KERNEL_REF]/[VAR]` 完整性
-- ✅ **冲突值脚本化**：`scripts/conflict-score.py` 让冲突值量化可被 Claude 用 code-execution 调用
-- ✅ **样例库**：`examples/mini-volume/` 提供 5 章极简样例卷《镜中之约》
+```bash
+bash tests/validate-embedded-layout.sh
+```
 
-### 2. 故意保留的"原貌"
-
-以下设计虽然在 Skill 体系下略显冗余，但**故意保留**以维持原系统的完整性：
-
-- `[KERNEL_REF:xxx]` 与 `[REF:xxx]` 的语义区别
-- Ω 级 / L1-L6 熔断级别
-- 双层真理仲裁的"内殿铸魂 / 外层神谕"二段制
-
-### 3. 后续可优化方向
-
-- ⏳ **可视化体检**：`「天命：体检」` 的输出可以加入 ASCII 图表或 Mermaid 图
-- ⏳ **CI 集成**：把 `scripts/reference-linter.ps1` 接入 git pre-commit hook
-- ⏳ **缓冲比脚本**：把"缓冲比健康度"也写成 Python 校验脚本
-
----
-
-## 五-bis、 维护工具用法
+退出码 `0` 表示新书模板结构满足内置规则包要求。
 
 ### 引用完整性 Lint
 
 ```powershell
-# 仅检查 Skill 内部一致性
-.\scripts\reference-linter.ps1
+# 从项目根目录检查内置规则系统
+pwsh .tianming/scripts/reference-linter.ps1 -SkillPath .tianming
 
-# 检查 + 与原始提示词反推校验
-.\scripts\reference-linter.ps1 -OriginalPrompt E:\AI\提示词.md
+# 从 .tianming 目录内检查
+pwsh .tianming/scripts/reference-linter.ps1
 
 # 输出 JSON 报告
-.\scripts\reference-linter.ps1 -Json | Out-File lint-report.json
+pwsh .tianming/scripts/reference-linter.ps1 -SkillPath .tianming -Json | Out-File lint-report.json
 ```
 
 退出码 `0` = 通过；`1` = 发现问题。
@@ -242,27 +211,27 @@ tianming-skill/
 
 ```bash
 # 交互式输入
-python scripts/conflict-score.py
+python3 .tianming/scripts/conflict-score.py
 
 # 跑内置示例
-python scripts/conflict-score.py --demo
+python3 .tianming/scripts/conflict-score.py --demo
 
 # 从 JSON 输入 + 输出 JSON
-python scripts/conflict-score.py --json input.json --output json
+python3 .tianming/scripts/conflict-score.py --json input.json --output json
 ```
 
 依赖：Python 3.7+，无第三方依赖。
 
 ---
 
-## 六、 故障排查
+## 六、故障排查
 
 ### 系统报告 `FATAL_ERROR: Blueprint_Mismatch`
 
-**原因**：`「天命：正文」` 或 `「天命：草案」` 指令的章序，
-在《世界基石.md》的【战术执行目录】中找不到对应条目。
+**原因**：`「天命：正文」` 或 `「天命：草案」` 指令的章序，在《世界基石.md》的【战术执行目录】中找不到对应条目。
 
 **解决**：
+
 1. 先执行 `「天命：目录」` 生成该章的目录条目
 2. 或检查指令中卷号/章号是否正确
 
@@ -271,53 +240,55 @@ python scripts/conflict-score.py --json input.json --output json
 **原因**：当前章节要发生的重大事件，在前文找不到逻辑先导。
 
 **解决**：
+
 1. 回到目录协议，在前面章节补充铺垫
 2. 或修改当前章节的核心事件，使其能从前文推导
 
 ### 系统报告 `FATAL_ERROR: Temporal_Anomaly_Detected`
 
-**原因**：草稿中出现了不属于当前时代的实体（如卷一出现卷三才该出现的角色）。
+**原因**：草稿中出现了不属于当前时代的实体，例如卷一出现卷三才该出现的角色。
 
 **解决**：
+
 1. 检查《档案事件.md》中该实体的时间锚点是否正确
 2. 或在目录协议阶段拒绝该实体的提前出现
 
 ### 系统报告 `FATAL_ERROR: Singularity_Quota_Exceeded`
 
-**原因**：本卷的「奇点事件」使用次数已超过
-[VAR:global.narrative.singularity_quota] = **3 次**。
+**原因**：本卷的「奇点事件」使用次数已超过 `.tianming/constants/global-constants.md` 中的配额。
 
 **解决**：
+
 1. 不允许在本卷再使用「奇点事件」标记
-2. 或修改 `constants/global-constants.md` 中的配额（不推荐）
+2. 或修改 `.tianming/constants/global-constants.md` 中的配额，不推荐
 
 ### 输出字数始终低于下限
 
-**原因**：[REF:protocol.main_body.ore_foundry]【精修初稿】的渲染失败，
-触发了 [REF:codex.output.forced_expansion]【最高优先级扩写】，
-但仍未达标。
+**原因**：正文渲染触发了最高优先级扩写，但仍未达标。
 
 **解决**：
-1. 检查《文风样本.md》是否提供了足够多的"高密度"样本
-2. 检查目录中该章的【核心事件】是否过于贫瘠（事件密度不够）
+
+1. 检查《文风样本.md》是否提供了足够多的高密度样本
+2. 检查目录中该章的【核心事件】是否过于贫瘠
 
 ---
 
-## 七、 版本与维护
+## 七、版本与维护
 
-* **基础版本**：基于 2025 年初版「天命提示词.md」（995 行）拆分而成
-* **拆分日期**：2026 年
-* **维护策略**：
-  - 协议层（`protocols/`、`codex/`、`aesthetic/`）按 semver 独立迭代
-  - 常数层（`constants/`）变更必须触发会话重启
-  - 知识库层（`kb-templates/`）模板更新不影响已使用的真实知识库
+- **基础版本**：基于 2025 年初版「天命提示词.md」（995 行）拆分而成
+- **拆分日期**：2026 年
+- **模板化重构**：2026 年，将独立 Skill 包改为新书项目内置 `.tianming/` 结构
+- **维护策略**：
+  - 协议层（`.tianming/protocols/`、`.tianming/codex/`、`.tianming/aesthetic/`）按 semver 独立迭代
+  - 常数层（`.tianming/constants/`）变更必须触发会话重启
+  - 知识库模板层（`.tianming/kb-templates/`）更新不影响已使用的真实知识库
 
 ---
 
-## 八、 致谢与版权
+## 八、致谢与版权
 
-本 Skill 的设计哲学来源于 2025 年的「天命」长 Prompt 系统。
-所有的核心法典、协议、戒律均保留原作者意图，仅做了结构化重组与引用规范化。
+本系统的设计哲学来源于 2025 年的「天命」长 Prompt 系统。
+所有核心法典、协议、戒律均保留原作者意图，仅做结构化重组、引用规范化与内置模板化改造。
 
 > **商用须知**：本项目基于 CC BY-NC-SA 4.0 协议开源，禁止未经授权的商业用途（包括但不限于二次包装售卖、商业 SaaS 部署、嵌入付费产品等）。任何商业用途请先联系原作者获得授权。
 >
@@ -325,12 +296,10 @@ python scripts/conflict-score.py --json input.json --output json
 
 ---
 
-## 🙏 致谢
+## 致谢
 
 感谢真诚、友善、团结、专业的 Linuxdo 社区，让我学到了那么多有关 AI 相关知识。
 
 [![LinuxDo community](https://img.shields.io/badge/LinuxDo-community-blue)](https://linux.do/)
 
 - [LinuxDo](https://linux.do/) 学 ai, 上 L 站!
-
----

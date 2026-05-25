@@ -4,7 +4,7 @@ description: |
   「天命」长篇小说协同创作系统。当用户使用「天命：大纲」「天命：规划」「天命：目录」
   「天命：草案」「天命：正文」「天命：体检」「天命：存档」等指令进行多卷长篇小说写作，
   或需要保证跨章节的世界观一致性、伏笔回收、节奏控制、文风稳定时使用本 Skill。
-  本系统依赖外部知识库：《世界基石.md》《世界观规则.md》《角色档案.md》《档案事件.md》《文风样本.md》。
+  本系统内置于新书项目的 .tianming/ 目录，依赖项目根目录知识库：《世界基石.md》《世界观规则.md》《角色档案.md》《档案事件.md》《文风样本.md》。
 allowed-tools: Read, Glob, Grep
 ---
 
@@ -12,7 +12,7 @@ allowed-tools: Read, Glob, Grep
 
 ## 一、本 Skill 的工作哲学
 
-本 Skill 由「执笔者」（用户）与「天命」（系统）共同完成长篇小说创作。
+本 Skill 内置在新书项目的 `.tianming/` 目录中，由「执笔者」（用户）与「天命」（系统）共同完成长篇小说创作。
 系统的所有行为都遵循三层结构：
 
 1. **法则之躯（Codex）** — 不可违背的绝对法典
@@ -61,7 +61,7 @@ constants/global-constants.md   # 全局常数表（所有 [VAR:xxx]）
 ### 始终保持只读访问（不主动加载，按需 Grep）
 
 ```
-kb-templates/*.template.md  # 知识库模板（用户应替换为实际知识库）
+kb-templates/*.template.md  # 内置知识库模板（用户应复制到项目根目录并替换为真实知识库）
 ```
 
 ---
@@ -79,9 +79,9 @@ kb-templates/*.template.md  # 知识库模板（用户应替换为实际知识�
 | **静态基石** | `《文风样本.md》` | 文气溯源的唯一美学基准 | 仅次于动态核心 |
 
 **定位顺序**：
-1. 优先在用户当前对话上下文中查找
-2. 其次在用户项目根目录查找
-3. 如仍未找到，参考本 Skill 的 `kb-templates/*.template.md` 让用户填充
+1. 优先在用户项目根目录查找
+2. 其次在用户当前对话上下文中查找
+3. 如仍未找到，参考本 Skill 的 `.tianming/kb-templates/*.template.md` 让用户填充
 
 **缺失处理**：若任何一份静态基石缺失，必须在初始化报告中明确指出
 `「绑定失败：核心缺失，原因：未发现《文风样本.md》」`，**严禁**凭空捏造内容。
@@ -140,43 +140,50 @@ kb-templates/*.template.md  # 知识库模板（用户应替换为实际知识�
 ## 七、模块清单
 
 ```
-tianming-skill/
-├── SKILL.md                          ← 当前文件
-├── README.md                         ← 使用说明 + 术语表
-├── core/                             ← 系统内核
-│   ├── boot-sequence.md
-│   ├── arbitration.md
-│   └── session-state.md
-├── codex/                            ← 绝对法典
-│   ├── consistency.md
-│   ├── narrative-structure.md
-│   ├── output-discipline.md
-│   ├── security.md
-│   └── system-protocols.md            ← 全局唯一系统级算法（冲突值/时空/载体DNA/类型穿透...）
-├── protocols/                        ← 运行协议
-│   ├── outline.md
-│   ├── toc.md
-│   ├── draft.md
-│   ├── main-body.md
-│   ├── health-check.md
-│   └── archive.md
-├── aesthetic/                        ← 天书铁律
-│   ├── style-genesis.md
-│   ├── writing-edicts.md
-│   ├── rendering-tools.md
-│   └── ai-signature-blacklist.md
-├── constants/
-│   └── global-constants.md
-├── kb-templates/                     ← 用户知识库模板
-│   ├── world-stone.template.md
-│   ├── world-rules.template.md
-│   ├── character-archive.template.md
-│   ├── archive-events.template.md
-│   └── style-sample.template.md
-├── scripts/                          ← 维护工具脚本
-│   ├── reference-linter.ps1          ← 引用完整性 lint（PowerShell）
-│   └── conflict-score.py             ← 冲突值量化算法（Python 3.7+）
-└── examples/                         ← 实战样例
+新书项目/
+├── AGENTS.md                         ← AI AGENTS 入口规则
+├── README.md                         ← 新书项目说明 + 术语表
+├── 世界基石.md                       ← 用户真实知识库（动态核心）
+├── 世界观规则.md                     ← 用户真实知识库（静态基石）
+├── 角色档案.md                       ← 用户真实知识库（静态基石）
+├── 档案事件.md                       ← 用户真实知识库（静态基石）
+├── 文风样本.md                       ← 用户真实知识库（静态基石）
+├── .tianming/
+│   ├── SKILL.md                      ← 当前文件
+│   ├── core/                         ← 系统内核
+│   │   ├── boot-sequence.md
+│   │   ├── arbitration.md
+│   │   └── session-state.md
+│   ├── codex/                        ← 绝对法典
+│   │   ├── consistency.md
+│   │   ├── narrative-structure.md
+│   │   ├── output-discipline.md
+│   │   ├── security.md
+│   │   └── system-protocols.md        ← 全局唯一系统级算法（冲突值/时空/载体DNA/类型穿透...）
+│   ├── protocols/                    ← 运行协议
+│   │   ├── outline.md
+│   │   ├── toc.md
+│   │   ├── draft.md
+│   │   ├── main-body.md
+│   │   ├── health-check.md
+│   │   └── archive.md
+│   ├── aesthetic/                    ← 天书铁律
+│   │   ├── style-genesis.md
+│   │   ├── writing-edicts.md
+│   │   ├── rendering-tools.md
+│   │   └── ai-signature-blacklist.md
+│   ├── constants/
+│   │   └── global-constants.md
+│   ├── kb-templates/                 ← 用户知识库模板
+│   │   ├── world-stone.template.md
+│   │   ├── world-rules.template.md
+│   │   ├── character-archive.template.md
+│   │   ├── archive-events.template.md
+│   │   └── style-sample.template.md
+│   └── scripts/                      ← 维护工具脚本
+│       ├── reference-linter.ps1      ← 引用完整性 lint（PowerShell）
+│       └── conflict-score.py         ← 冲突值量化算法（Python 3.7+）
+└── examples/                         ← 根目录实战样例
     └── mini-volume/                  ← 5 章极简样例卷《镜中之约》
         ├── README.md
         ├── 世界基石.md
