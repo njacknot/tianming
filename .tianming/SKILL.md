@@ -4,15 +4,15 @@ description: |
   「天命」长篇小说协同创作系统。当用户使用「天命：大纲」「天命：规划」「天命：目录」
   「天命：草案」「天命：正文」「天命：体检」「天命：存档」等指令进行多卷长篇小说写作，
   或需要保证跨章节的世界观一致性、伏笔回收、节奏控制、文风稳定时使用本 Skill。
-  本系统内置于新书项目的 .tianming/ 目录，依赖项目根目录知识库：《世界基石.md》《世界观规则.md》《角色档案.md》《档案事件.md》《文风样本.md》。
-allowed-tools: Read, Glob, Grep
+  本系统内置于天命母项目的 .tianming/ 目录，通过 /tianming setup 生成新书目录，并依赖当前新书目录知识库：《世界基石.md》《世界观规则.md》《角色档案.md》《档案事件.md》《文风样本.md》。
+allowed-tools: Read, Glob, Grep, Write, Bash
 ---
 
 # 天命 · 长篇小说协同创作系统
 
 ## 一、本 Skill 的工作哲学
 
-本 Skill 内置在新书项目的 `.tianming/` 目录中，由「执笔者」（用户）与「天命」（系统）共同完成长篇小说创作。
+本 Skill 内置在天命母项目的 `.tianming/` 目录中，由「执笔者」（用户）与「天命」（系统）共同完成长篇小说创作。
 系统的所有行为都遵循三层结构：
 
 1. **法则之躯（Codex）** — 不可违背的绝对法典
@@ -46,6 +46,7 @@ constants/global-constants.md   # 全局常数表（所有 [VAR:xxx]）
 
 | 用户指令 | API 标识 | 加载协议文件 | 联动加载 | 调用协议 ID |
 |---|---|---|---|---|
+| `/tianming setup [书名]` | `api.run.setup_novel` | 本文件【协议式开书】 | `.tianming/kb-templates/*.template.md` | [REF:protocol.tianming.setup] |
 | `「天命：大纲」` | `api.run.mandate_outline` | `protocols/outline.md` | `codex/narrative-structure.md`、`codex/consistency.md`、`codex/system-protocols.md` | [REF:protocol.outline] |
 | `「天命：规划」`<br>`「天命：规划 \| 卷[X]」` | `api.run.mandate_plan` | `protocols/toc.md`（模式一） | `codex/narrative-structure.md`、`codex/system-protocols.md` | [REF:protocol.toc.unified_command] |
 | `「天命：目录 \| 卷[X] 第[Y]-[Z]章」` | `api.run.mandate_directory` | `protocols/toc.md`（模式二） | `codex/consistency.md`、`codex/security.md`、`codex/system-protocols.md`、`codex/output-discipline.md` | [REF:protocol.toc.unified_command] |
@@ -58,17 +59,54 @@ constants/global-constants.md   # 全局常数表（所有 [VAR:xxx]）
 > - **标准格式**：使用竖线 `|` 分隔指令名与参数（如 `「天命：目录 | 卷[X] 第[Y]-[Z]章」`）
 > - **简写兼容**：允许省略竖线（如 `「天命：目录 卷X 第Y-Z章」`），系统应正确识别
 
+### 协议式开书
+
+[ID:protocol.tianming.setup]
+
+当接收到 `/tianming setup [书名]` 指令时，系统必须在母项目根目录生成一个新的【新书目录】。
+
+**参数解析**：
+
+1. `[书名]` 为必填参数。若缺失，必须询问用户提供书名。
+2. `[书名]` 必须被解析为单层目录名，禁止包含 `/`、`\`、`..`。
+3. 禁止使用以下保留名：`.tianming`、`.git`、`docs`、`tests`、`examples`、`AGENTS.md`、`README.md`、`LICENSE`。
+
+**生成规则**：
+
+1. 若目标目录已存在且非空，必须停止，禁止覆盖。
+2. 若目标目录不存在，创建该目录。
+3. 从 `.tianming/kb-templates/` 读取模板内容，并在目标目录内生成：
+   - `世界基石.md` ← `world-stone.template.md`
+   - `世界观规则.md` ← `world-rules.template.md`
+   - `角色档案.md` ← `character-archive.template.md`
+   - `档案事件.md` ← `archive-events.template.md`
+   - `文风样本.md` ← `style-sample.template.md`
+4. 在目标目录内生成 `README.md`，说明该目录是天命新书知识库目录，规则系统位于母项目根目录 `.tianming/`。
+5. 不得复制 `.tianming/`、`AGENTS.md`、维护脚本或示例目录到目标新书目录。
+
+**完成报告**：
+
+```markdown
+【天命开书完成】
+
+- 新书目录：`[书名]/`
+- 知识库文件：已生成 5/5
+- 当前新书目录：已切换为 `[书名]/`
+
+下一步：请填写 `[书名]/世界观规则.md`、`[书名]/角色档案.md`、`[书名]/文风样本.md`，然后输入 `初始化`。
+```
+
 ### 始终保持只读访问（不主动加载，按需 Grep）
 
 ```
-kb-templates/*.template.md  # 内置知识库模板（用户应复制到项目根目录并替换为真实知识库）
+kb-templates/*.template.md  # 内置知识库模板（/tianming setup 会复制到新书目录）
 ```
 
 ---
 
 ## 三、用户知识库定位规则
 
-用户的真实知识库由两部分组成，统称【统一知识库核心】：
+用户的真实知识库位于【当前新书目录】中，由两部分组成，统称【统一知识库核心】：
 
 | 类型 | 文件 | 角色 | 优先级 |
 |---|---|---|---|
@@ -79,9 +117,11 @@ kb-templates/*.template.md  # 内置知识库模板（用户应复制到项目�
 | **静态基石** | `《文风样本.md》` | 文气溯源的唯一美学基准 | 仅次于动态核心 |
 
 **定位顺序**：
-1. 优先在用户项目根目录查找
-2. 其次在用户当前对话上下文中查找
-3. 如仍未找到，参考本 Skill 的 `.tianming/kb-templates/*.template.md` 让用户填充
+1. 优先读取当前会话中由 `/tianming setup [书名]` 生成或用户明确指定的【当前新书目录】
+2. 若未指定新书目录，扫描母项目根目录下是否只有一个包含五件知识库文件的子目录；若唯一，则使用该目录
+3. 若存在多个候选新书目录，必须要求用户指定，禁止自行猜测
+4. 其次在用户当前对话上下文中查找
+5. 如仍未找到，参考本 Skill 的 `.tianming/kb-templates/*.template.md` 让用户填充
 
 **缺失处理**：若任何一份静态基石缺失，必须在初始化报告中明确指出
 `「绑定失败：核心缺失，原因：未发现《文风样本.md》」`，**严禁**凭空捏造内容。
@@ -140,14 +180,9 @@ kb-templates/*.template.md  # 内置知识库模板（用户应复制到项目�
 ## 七、模块清单
 
 ```
-新书项目/
+天命母项目/
 ├── AGENTS.md                         ← AI AGENTS 入口规则
-├── README.md                         ← 新书项目说明 + 术语表
-├── 世界基石.md                       ← 用户真实知识库（动态核心）
-├── 世界观规则.md                     ← 用户真实知识库（静态基石）
-├── 角色档案.md                       ← 用户真实知识库（静态基石）
-├── 档案事件.md                       ← 用户真实知识库（静态基石）
-├── 文风样本.md                       ← 用户真实知识库（静态基石）
+├── README.md                         ← 母项目说明 + 开书指南
 ├── .tianming/
 │   ├── SKILL.md                      ← 当前文件
 │   ├── core/                         ← 系统内核
@@ -183,6 +218,13 @@ kb-templates/*.template.md  # 内置知识库模板（用户应复制到项目�
 │   └── scripts/                      ← 维护工具脚本
 │       ├── reference-linter.ps1      ← 引用完整性 lint（PowerShell）
 │       └── conflict-score.py         ← 冲突值量化算法（Python 3.7+）
+├── [书名]/                           ← 由 /tianming setup 生成的新书目录
+│   ├── README.md
+│   ├── 世界基石.md                   ← 用户真实知识库（动态核心）
+│   ├── 世界观规则.md                 ← 用户真实知识库（静态基石）
+│   ├── 角色档案.md                   ← 用户真实知识库（静态基石）
+│   ├── 档案事件.md                   ← 用户真实知识库（静态基石）
+│   └── 文风样本.md                   ← 用户真实知识库（静态基石）
 └── examples/                         ← 根目录实战样例
     └── mini-volume/                  ← 5 章极简样例卷《镜中之约》
         ├── README.md
