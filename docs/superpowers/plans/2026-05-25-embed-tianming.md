@@ -17,6 +17,7 @@
 
 - [ ] Require `.tianming/SKILL.md`, `AGENTS.md`, and `.tianming/kb-templates/world-stone.template.md`.
 - [ ] Require `/tianming setup` to appear in `AGENTS.md`, `README.md`, and `.tianming/SKILL.md`.
+- [ ] Require `5 个开书问题` and `第一版知识库` to appear in `AGENTS.md`, `README.md`, and `.tianming/SKILL.md`.
 - [ ] Reject root-level `世界基石.md`, `世界观规则.md`, `角色档案.md`, `档案事件.md`, and `文风样本.md`.
 - [ ] Run `bash tests/validate-embedded-layout.sh` and expect it to pass.
 
@@ -27,8 +28,9 @@
 - Modify: `AGENTS.md`
 
 - [ ] Add `/tianming setup [书名]` to the command router.
+- [ ] Require setup to ask 5 setup questions before creating files.
 - [ ] Define setup validation rules for safe single-level directory names.
-- [ ] Define generated files and template mappings.
+- [ ] Define first-version knowledge base quality requirements and template mappings.
 - [ ] Define active book directory behavior.
 
 ### Task 3: Update User Documentation
@@ -38,6 +40,7 @@
 
 - [ ] Describe the repository as a Tianming mother project.
 - [ ] Document `git clone`, `cd tianming`, and `/tianming setup 我的新书`.
+- [ ] Document the 5 setup questions and first-version knowledge base flow.
 - [ ] Show the generated book directory structure.
 - [ ] Remove instructions that put the five production knowledge-base files at the repository root.
 
