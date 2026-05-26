@@ -84,8 +84,8 @@ constants/global-constants.md   # 全局常数表（所有 [VAR:xxx]）
 - 如果项目根目录已有 `AGENTS.md`，必须保留原有内容；若缺少天命入口规则，则追加“天命规则入口”段落。
 - “天命规则入口”至少必须包含：读取 `.tianming/SKILL.md`、执行 `/tianming setup`、当前新书目录定位、禁止凭空捏造知识库事实。
 - 单目录开书时，母项目根目录就是项目根目录。
-- 推荐项目化布局时，英文项目主文件夹是项目根目录，中文写作目录只是知识库目录。
-- 不得把 `AGENTS.md` 复制到中文写作目录或单纯的知识库目录中。
+- 推荐项目化布局时，英文项目主文件夹是全新的项目根目录。此时必须在该新根目录下生成 `AGENTS.md` 并将本系统的 `.tianming/` 完整复制过去。
+- **绝对禁区**：不得把 `AGENTS.md` 或 `.tianming/` 复制到中文写作目录或单纯的知识库目录（如 `[中文书名]/`）中。
 
 **开书问诊规则**：
 
@@ -141,8 +141,8 @@ constants/global-constants.md   # 全局常数表（所有 [VAR:xxx]）
 
 - `[english-project-name]` 适合作为 Git 仓库、IDE 工程、终端路径与项目主文件夹名称。
 - `[中文书名]` 适合作为写作目录，保存真实小说知识库。
-- 必须创建或修复项目根 AGENTS.md，用于约束不主动遵守 Skill 规范的 AI AGENTS 读取 `.tianming/SKILL.md`。
-- `.tianming/` 可放在英文项目根目录，作为该新书项目的内置规则系统。
+- 必须在英文项目根目录创建或修复项目根 AGENTS.md，用于约束不主动遵守 Skill 规范的 AI AGENTS 读取 `.tianming/SKILL.md`。
+- **移植系统内核**：必须将母项目根目录的 `.tianming/` 文件夹及其所有内容，完整复制到 `[english-project-name]/` 根目录下，作为该新书项目的独立内置规则系统。
 - 该布局是推荐初始化形态，不是唯一合法形态；若用户只提供一个书名，仍按单目录开书流程执行，除非用户要求项目化拆分。
 
 **完成报告**：
@@ -278,7 +278,7 @@ kb-templates/*.template.md  # 内置知识库模板（/tianming setup 会复制�
 │   │   ├── archive-events.template.md
 │   │   └── style-sample.template.md
 │   └── scripts/                      ← 维护工具脚本
-│       ├── reference-linter.ps1      ← 引用完整性 lint（PowerShell）
+│       ├── reference-linter.py       ← 引用完整性 lint（Python 3.7+）
 │       └── conflict-score.py         ← 冲突值量化算法（Python 3.7+）
 ├── [书名]/                           ← 由 /tianming setup 生成的新书目录
 │   ├── README.md

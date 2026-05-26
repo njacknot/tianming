@@ -74,6 +74,6 @@ When an AI agent receives the command, it must:
 - `AGENTS.md`, `README.md`, and `.tianming/SKILL.md` document `/tianming setup`.
 - `AGENTS.md`, `README.md`, and `.tianming/SKILL.md` document the 5 setup questions and first-version knowledge base behavior.
 - `AGENTS.md`, `README.md`, and `.tianming/SKILL.md` document directory validation before interview and project-root `AGENTS.md` repair.
-- `.tianming/scripts/reference-linter.ps1` exists.
+- `.tianming/scripts/reference-linter.py` exists.
 - `.tianming/kb-templates/world-stone.template.md` exists.
 - Root-level production knowledge-base files do not exist; they belong inside generated book directories.

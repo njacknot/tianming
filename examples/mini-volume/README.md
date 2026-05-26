@@ -69,8 +69,8 @@ examples/mini-volume/
 
 本样例的所有 `[REF:xxx]` 引用，都已通过：
 
-```powershell
-pwsh .tianming/scripts/reference-linter.ps1 -SkillPath .tianming -OriginalPrompt ..\提示词.md
+```bash
+python3 .tianming/scripts/reference-linter.py -SkillPath .tianming -OriginalPrompt ../提示词.md
 ```
 
 校验。任何对样例的修改建议都应保持引用完整性。

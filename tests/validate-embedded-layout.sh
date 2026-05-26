@@ -40,7 +40,7 @@ require_text .tianming/SKILL.md "创建或修复项目根 AGENTS.md" ".tianming/
 require_text AGENTS.md "创建或修复项目根 AGENTS.md" "AGENTS.md must ensure project-root AGENTS.md"
 require_text README.md "创建或修复项目根 AGENTS.md" "README.md must document project-root AGENTS.md repair"
 ! grep -Fq "tianming-skill/" README.md || fail "README.md still documents the old standalone loading workflow"
-[[ -f ".tianming/scripts/reference-linter.ps1" ]] || fail "missing embedded reference linter"
+[[ -f ".tianming/scripts/reference-linter.py" ]] || fail "missing embedded reference linter"
 [[ -f ".tianming/kb-templates/world-stone.template.md" ]] || fail "missing embedded knowledge-base templates"
 [[ ! -f "世界基石.md" ]] || fail "root 世界基石.md belongs inside a generated book directory"
 [[ ! -f "世界观规则.md" ]] || fail "root 世界观规则.md belongs inside a generated book directory"

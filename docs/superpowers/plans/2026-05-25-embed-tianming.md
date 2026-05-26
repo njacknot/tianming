@@ -57,8 +57,6 @@ python3 .tianming/scripts/conflict-score.py --demo
 git diff --check
 ```
 
-If PowerShell is available:
-
-```powershell
-pwsh .tianming/scripts/reference-linter.ps1 -SkillPath .tianming
+```bash
+python3 .tianming/scripts/reference-linter.py -SkillPath .tianming
 ```

@@ -199,12 +199,12 @@ bash tests/validate-embedded-layout.sh
 
 ### 引用完整性 Lint
 
-```powershell
+```bash
 # 从母项目根目录检查内置规则系统
-pwsh .tianming/scripts/reference-linter.ps1 -SkillPath .tianming
+python3 .tianming/scripts/reference-linter.py -SkillPath .tianming
 
 # 输出 JSON 报告
-pwsh .tianming/scripts/reference-linter.ps1 -SkillPath .tianming -Json | Out-File lint-report.json
+python3 .tianming/scripts/reference-linter.py -SkillPath .tianming --json > lint-report.json
 ```
 
 退出码 `0` = 通过；`1` = 发现问题。
