@@ -84,6 +84,30 @@ constants/global-constants.md   # 全局常数表（所有 [VAR:xxx]）
 4. 在目标目录内生成 `README.md`，说明该目录是天命新书知识库目录，规则系统位于母项目根目录 `.tianming/`。
 5. 不得复制 `.tianming/`、`AGENTS.md`、维护脚本或示例目录到目标新书目录。
 
+**推荐项目化布局（非硬性）**：
+
+当用户希望把一本新书初始化成独立项目时，系统应优先建议使用“英文项目名 + 中文写作目录”的两层结构：
+
+```text
+[english-project-name]/
+├── AGENTS.md
+├── .tianming/
+├── README.md
+└── [中文书名]/
+    ├── README.md
+    ├── 世界基石.md
+    ├── 世界观规则.md
+    ├── 角色档案.md
+    ├── 档案事件.md
+    └── 文风样本.md
+```
+
+- `[english-project-name]` 适合作为 Git 仓库、IDE 工程、终端路径与项目主文件夹名称。
+- `[中文书名]` 适合作为写作目录，保存真实小说知识库。
+- `AGENTS.md` 应创建在英文项目根目录，用于约束不主动遵守 Skill 规范的 AI AGENTS 读取 `.tianming/SKILL.md`。
+- `.tianming/` 可放在英文项目根目录，作为该新书项目的内置规则系统。
+- 该布局是推荐初始化形态，不是唯一合法形态；若用户只提供一个书名，仍按单目录开书流程执行，除非用户要求项目化拆分。
+
 **完成报告**：
 
 ```markdown
