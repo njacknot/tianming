@@ -41,15 +41,14 @@ Generated book directories contain only book-facing knowledge files:
 
 When an AI agent receives the command, it must:
 
-1. Ask 5 setup questions before creating files.
-2. Wait for the user's answers unless the same message already answers all five categories.
-3. Validate that `[book-name]` is a single safe directory name.
-4. Reject path traversal, nested paths, hidden directories, and reserved names.
-5. Refuse to overwrite an existing non-empty directory.
-6. Create `[book-name]/`.
-7. Use `.tianming/kb-templates/` as structure, then generate a populated first-version knowledge base in `[book-name]/` using the Chinese production filenames.
-8. Generate `[book-name]/README.md`.
-9. Treat `[book-name]/` as the active book directory for the current session.
+1. Validate that `[book-name]` is a single safe directory name.
+2. Reject path traversal, nested paths, hidden directories, reserved names, and existing non-empty target directories.
+3. Create or repair the project-root `AGENTS.md` so agents must read `.tianming/SKILL.md` and honor `/tianming setup`.
+4. Ask 5 setup questions before creating files, unless the same message already answers all five categories.
+5. Create `[book-name]/`.
+6. Use `.tianming/kb-templates/` as structure, then generate a populated first-version knowledge base in `[book-name]/` using the Chinese production filenames.
+7. Generate `[book-name]/README.md`.
+8. Treat `[book-name]/` as the active book directory for the current session.
 
 ## Agent Contract
 
@@ -59,6 +58,7 @@ When an AI agent receives the command, it must:
 - Treat `.tianming/` as the shared rule system.
 - Treat generated book directories as story knowledge bases.
 - Use `/tianming setup [book-name]` to create new book directories.
+- Create or repair project-root `AGENTS.md` during setup.
 - Ask 5 setup questions before generating the first-version knowledge base.
 - Read story facts from the active book directory, not from `.tianming/`.
 - Avoid guessing when multiple candidate book directories exist.
@@ -73,6 +73,7 @@ When an AI agent receives the command, it must:
 - Root `AGENTS.md` exists and references `.tianming/SKILL.md`.
 - `AGENTS.md`, `README.md`, and `.tianming/SKILL.md` document `/tianming setup`.
 - `AGENTS.md`, `README.md`, and `.tianming/SKILL.md` document the 5 setup questions and first-version knowledge base behavior.
+- `AGENTS.md`, `README.md`, and `.tianming/SKILL.md` document directory validation before interview and project-root `AGENTS.md` repair.
 - `.tianming/scripts/reference-linter.ps1` exists.
 - `.tianming/kb-templates/world-stone.template.md` exists.
 - Root-level production knowledge-base files do not exist; they belong inside generated book directories.

@@ -18,6 +18,7 @@
 - [ ] Require `.tianming/SKILL.md`, `AGENTS.md`, and `.tianming/kb-templates/world-stone.template.md`.
 - [ ] Require `/tianming setup` to appear in `AGENTS.md`, `README.md`, and `.tianming/SKILL.md`.
 - [ ] Require `5 个开书问题` and `第一版知识库` to appear in `AGENTS.md`, `README.md`, and `.tianming/SKILL.md`.
+- [ ] Require directory validation before interview and project-root `AGENTS.md` repair rules.
 - [ ] Reject root-level `世界基石.md`, `世界观规则.md`, `角色档案.md`, `档案事件.md`, and `文风样本.md`.
 - [ ] Run `bash tests/validate-embedded-layout.sh` and expect it to pass.
 
@@ -28,8 +29,9 @@
 - Modify: `AGENTS.md`
 
 - [ ] Add `/tianming setup [书名]` to the command router.
-- [ ] Require setup to ask 5 setup questions before creating files.
 - [ ] Define setup validation rules for safe single-level directory names.
+- [ ] Require setup to create or repair project-root `AGENTS.md`.
+- [ ] Require setup to ask 5 setup questions before creating files unless the user already answered all five in the same message.
 - [ ] Define first-version knowledge base quality requirements and template mappings.
 - [ ] Define active book directory behavior.
 
